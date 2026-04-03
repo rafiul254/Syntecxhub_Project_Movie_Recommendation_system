@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}CineMatch AI — My Watchlist{% endblock %}
+
+{% block content %}
+<div class="wl-page">
+    <div class="container">
+        <div class="wl-header">
+            <h1 class="wl-title">💜 My Watchlist</h1>
+            <p class="wl-sub">{{ wl_movies|length }} movie{% if wl_movies|length != 1 %}s{% endif %} saved</p>
+        </div>
+
+        {% if wl_movies %}
+        <div class="wl-grid">
+            {% for movie in wl_movies %}
+            <div class="wl-card">
+                <div class="wl-poster">
+                    {% if movie.poster %}
+                    <img src="{{ movie.poster }}" alt="{{ movie.title }}" loading="lazy">
+                    {% else %}
+                    <div class="poster-ph"><span>🎬</span><p>{{ movie.title[:18] }}</p></div>
+                    {% endif %}
+                </div>
+                <div class="wl-info">
+                    <h3 class="wl-movie-title">{{ movie.title }}</h3>
+                    <div class="card-meta">
+                        <span class="rating-star">⭐ {{ movie.vote_average }}</span>
+                        <span class="card-year">{{ movie.year }}</span>
+                        {% if movie.runtime %}<span class="runtime">⏱ {{ movie.runtime }}m</span>{% endif %}
+                    </div>
+                    {% if movie.director %}
+                    <p class="wl-director">🎥 {{ movie.director }}</p>
+                    {% endif %}
+                    <div class="genre-tags-sm">
+                        {% for g in movie.genres %}
+                        <span class="genre-tag-sm">{{ g }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="wl-actions">
+                        <form action="{{ url_for('recommend') }}" method="POST" style="display:inline;">
+                            <input type="hidden" name="movie_title" value="{{ movie.title }}">
+                            <button type="submit" class="btn-sm-primary">Find Similar</button>
+                        </form>
+                        <button class="btn-sm-danger"
+                                onclick="removeFromWatchlist(this, '{{ movie.title }}')"
+                                data-title="{{ movie.title }}">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-wl">
+            <div class="empty-icon">💜</div>
+            <h2>Your watchlist is empty</h2>
+            <p>Search for movies and click the heart icon to save them here.</p>
+            <a href="{{ url_for('index') }}" class="btn-primary">Discover Movies</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function removeFromWatchlist(btn, title) {
+    fetch('/watchlist/toggle', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'title=' + encodeURIComponent(title)
+    }).then(() => {
+        btn.closest('.wl-card').style.opacity = '0';
+        btn.closest('.wl-card').style.transform = 'scale(0.95)';
+        setTimeout(() => btn.closest('.wl-card').remove(), 300);
+        showToast('Removed from watchlist');
+    });
+}
+</script>
+{% endblock %}

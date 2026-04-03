@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block title %}CineMatch AI — Because you watched {{ source.title }}{% endblock %}
+
+{% block content %}
+<div class="results-page">
+
+    <div class="source-hero">
+        {% if source_poster %}
+        <div class="source-hero-bg" style="background-image: url('{{ source_poster }}')"></div>
+        {% else %}
+        <div class="source-hero-bg source-hero-bg-empty"></div>
+        {% endif %}
+        <div class="source-hero-overlay"></div>
+        <div class="source-hero-content container">
+            <div class="source-poster-wrap">
+                {% if source_poster %}
+                <img src="{{ source_poster }}" alt="{{ source.title }}" class="source-poster-img">
+                {% else %}
+                <div class="source-poster-ph"><span>🎬</span><p>{{ source.title[:16] }}</p></div>
+                {% endif %}
+            </div>
+            <div class="source-info">
+                <div class="source-chip">Because you watched</div>
+                <h1 class="source-title">{{ source.title }}</h1>
+                <div class="source-meta-row">
+                    <span class="meta-rating">⭐ {{ source.vote_average | round(1) }}</span>
+                    <span class="meta-dot">·</span>
+                    <span class="meta-year">{{ source.year }}</span>
+                    {% if source.runtime %}<span class="meta-dot">·</span><span class="meta-runtime">{{ source.runtime }} min</span>{% endif %}
+                    {% if source.director %}<span class="meta-dot">·</span><span class="meta-dir">🎥 {{ source.director }}</span>{% endif %}
+                </div>
+                <div class="genre-pills">
+                    {% for g in source.genres[:4] %}
+                    <span class="genre-pill">{{ g }}</span>
+                    {% endfor %}
+                </div>
+                {% if mood_info %}
+                <div class="mood-active" style="color: {{ mood_info.color }}; border-color: {{ mood_info.color }};">
+                    {{ mood_info.emoji }} Mood filter: {{ mood|capitalize }}
+                </div>
+                {% endif %}
+                <div class="source-actions">
+                    <a href="{{ url_for('index') }}" class="btn-back">← New Search</a>
+                    <span class="rec-count-badge">{{ recs|length }} recommendations</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recs-section container">
+        {% if recs %}
+        <h2 class="recs-title">
+            Recommended For You
+            {% if mood %}<span class="mood-tag">{{ mood_info.emoji }} {{ mood|capitalize }}</span>{% endif %}
+        </h2>
+
+        <div class="netflix-grid">
+            {% for rec in recs %}
+            <div class="nf-card" onclick="searchMovie(this.dataset.title)" data-title="{{ rec.title }}" style="cursor:pointer;">
+                <div class="nf-poster">
+                    {% if rec.poster %}
+                    <img src="{{ rec.poster }}" alt="{{ rec.title }}" loading="lazy">
+                    {% else %}
+                    <div class="nf-poster-ph">
+                        <span>🎬</span>
+                        <p>{{ rec.title[:20] }}</p>
+                    </div>
+                    {% endif %}
+                    <div class="nf-score-badge">{{ rec.hybrid_score }}%</div>
+                    <button class="nf-heart {% if rec.title in watchlist %}hearted{% endif %}"
+        onclick="toggleWatchlist(this, this.dataset.title)"
+        data-title="{{ rec.title }}"
+        title="Add to My List">
+                    </button>
+                    <div class="nf-hover-overlay">
+                        <div class="nf-hover-top">
+                            <div class="nf-meta-quick">
+                                <span class="nf-rating">⭐ {{ rec.vote_average }}</span>
+                                <span class="nf-year-sm">{{ rec.year }}</span>
+                                {% if rec.runtime %}<span class="nf-runtime-sm">{{ rec.runtime }}m</span>{% endif %}
+                            </div>
+                            <div class="nf-genres-quick">
+                                {% for g in rec.genres %}
+                                <span class="nf-genre-sm">{{ g }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="nf-overview-quick">{{ rec.overview[:120] }}{% if rec.overview|length > 120 %}...{% endif %}</p>
+                        {% if rec.match_reasons %}
+                        <div class="nf-dna">
+                            <span class="nf-dna-label">🧬 Match:</span>
+                            {% for r in rec.match_reasons[:2] %}
+                            <span class="nf-dna-tag nf-dna-{{ r.type }}">{{ r.icon }} {{ r.label }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="nf-score-bars">
+                            <div class="nf-bar-row">
+                                <span class="nf-bar-lbl">Content</span>
+                                <div class="nf-bar"><div class="nf-bar-fill sim-c" style="width:{{ rec.similarity }}%"></div></div>
+                                <span class="nf-bar-val">{{ rec.similarity }}%</span>
+                            </div>
+                            <div class="nf-bar-row">
+                                <span class="nf-bar-lbl">Hybrid</span>
+                                <div class="nf-bar"><div class="nf-bar-fill hyb-c" style="width:{{ rec.hybrid_score }}%"></div></div>
+                                <span class="nf-bar-val">{{ rec.hybrid_score }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nf-card-title">{{ rec.title }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-results">
+            <p>😔 No results for the selected mood. Try without a mood filter.</p>
+            <a href="{{ url_for('index') }}" class="btn-back">← Back</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

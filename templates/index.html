@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}CineMatch AI — Intelligent Movie Discovery{% endblock %}
+
+{% block content %}
+
+<section class="hero-search-section">
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-chip">
+            <span class="chip-dot"></span> AI-Powered · 5000+ Movies · Hybrid Scoring
+        </div>
+        <h1 class="hero-title">Unlimited Movies,<br><span class="gradient-text">Smart Recommendations</span></h1>
+        <p class="hero-sub">Tell us what you love. We'll find what you'll watch next.</p>
+
+        {% if error %}
+        <div class="alert-error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form action="{{ url_for('recommend') }}" method="POST" id="mainForm">
+            <div class="hero-search-bar">
+                <span class="hs-icon">🔍</span>
+                <input
+                    type="text"
+                    name="movie_title"
+                    id="movieInput"
+                    placeholder="Enter a movie you love... (e.g. Inception, Interstellar)"
+                    autocomplete="off"
+                    required
+                >
+                <div class="autocomplete-list" id="autocomplete"></div>
+                <button type="submit" class="btn-hero-search" id="submitBtn">
+                    <span id="btnText">Find Movies</span>
+                    <span id="btnLoader" class="hidden">Searching...</span>
+                </button>
+            </div>
+
+            <div class="mood-section">
+                <p class="mood-heading">🎭 I'm in the mood for <span class="optional-tag">optional</span></p>
+                <div class="mood-active-display" id="moodDisplay" style="display:none;">
+                    <span id="moodDisplayText"></span>
+                    <span class="mood-display-hint">← mood filter is ON. Search a movie to apply it.</span>
+                </div>
+                <div class="mood-grid">
+                    <label class="mood-card selected" data-color="#64748b" data-mood="Any Mood">
+                        <input type="radio" name="mood" value="" checked class="mood-radio">
+                        <span class="mood-emoji">🎲</span>
+                        <span class="mood-name">Any</span>
+                    </label>
+                    {% for key, val in moods.items() %}
+                    <label class="mood-card" data-color="{{ val.color }}" data-mood="{{ val.emoji }} {{ key|capitalize }}">
+                        <input type="radio" name="mood" value="{{ key }}" class="mood-radio">
+                        <span class="mood-emoji">{{ val.emoji }}</span>
+                        <span class="mood-name">{{ key|capitalize }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="browse-section">
+    <div class="row-label">🔥 Popular Right Now</div>
+    <div class="movie-row" id="popularRow">
+        {% for movie in popular %}
+        <div class="mini-card" onclick="quickSearch('{{ movie.title }}')">
+            <div class="mini-poster">
+                {% if movie.poster %}
+                <img src="{{ movie.poster }}" alt="{{ movie.title }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+                {% else %}
+                <div class="mini-poster-ph">🎬</div>
+                {% endif %}
+                <div class="mini-overlay">
+                    <span class="mini-play">▶</span>
+                    <p class="mini-title">{{ movie.title }}</p>
+                    <p class="mini-meta">⭐ {{ movie.vote_average }} · {{ movie.year }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-heading">Why CineMatch AI is Different</h2>
+        <div class="feat-grid">
+            <div class="feat-card">
+                <div class="feat-icon">🧬</div>
+                <h3>Movie DNA Analysis</h3>
+                <p>Every recommendation reveals exactly why it was suggested — shared genres, cast, and director connections.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">⚗️</div>
+                <h3>Hybrid Scoring Engine</h3>
+                <p>Content similarity + Bayesian quality rating + popularity boost. Better than raw cosine similarity alone.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">🎭</div>
+                <h3>Mood-Based Discovery</h3>
+                <p>Six mood filters pre-filter by genre clusters before ranking — context-aware recommendations.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon">📊</div>
+                <h3>Cinematic Analytics</h3>
+                <p>Explore the full 5000-movie dataset through interactive dashboards: genres, ratings, directors, trends.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function quickSearch(title) {
+    document.getElementById('movieInput').value = title;
+    document.getElementById('mainForm').submit();
+}
+</script>
+{% endblock %}

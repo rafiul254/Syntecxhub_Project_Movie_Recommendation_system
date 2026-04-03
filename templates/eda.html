@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}CineMatch AI — Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="eda-page">
+    <div class="eda-header">
+        <div class="orb orb-1" style="opacity:0.3"></div>
+        <div class="container">
+            <div class="eda-hero-chip">📊 Dataset Insights</div>
+            <h1 class="eda-title">Cinematic Analytics <span class="gradient-text">Dashboard</span></h1>
+            <p class="eda-sub">Exploring 5000+ movies from the TMDB dataset</p>
+        </div>
+    </div>
+
+    <div class="container eda-container">
+        <div class="stat-cards">
+            <div class="stat-card">
+                <span class="stat-icon">🎬</span>
+                <div class="stat-value">{{ stats.total }}</div>
+                <div class="stat-label">Total Movies</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⭐</span>
+                <div class="stat-value">{{ stats.avg_rating }}</div>
+                <div class="stat-label">Avg Rating</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">⏱</span>
+                <div class="stat-value">{{ stats.avg_runtime }}<span class="stat-unit">min</span></div>
+                <div class="stat-label">Avg Runtime</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🎭</span>
+                <div class="stat-value">{{ stats.total_genres }}</div>
+                <div class="stat-label">Unique Genres</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card chart-wide">
+                <h3 class="chart-title">🎬 Top Genres Distribution</h3>
+                <canvas id="genreChart" height="90"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">⭐ Rating Distribution</h3>
+                <canvas id="ratingChart" height="220"></canvas>
+            </div>
+            <div class="chart-card chart-wide">
+                <h3 class="chart-title">📅 Movies Released Per Year (1990–2022)</h3>
+                <canvas id="yearChart" height="90"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">⏱ Runtime Distribution</h3>
+                <canvas id="runtimeChart" height="220"></canvas>
+            </div>
+            <div class="chart-card chart-wide">
+                <h3 class="chart-title">🎥 Most Prolific Directors</h3>
+                <canvas id="directorChart" height="90"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const stats = {{ stats|tojson }};
+const purple = '#8b5cf6', blue = '#3b82f6', gold = '#f59e0b',
+      green = '#10b981', red = '#ef4444', pink = '#ec4899';
+
+const defaultOpts = {
+    responsive: true,
+    plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Inter' } } } },
+    scales: {
+        x: { ticks: { color: '#64748b' }, grid: { color: 'rgba(148,163,184,0.08)' } },
+        y: { ticks: { color: '#64748b' }, grid: { color: 'rgba(148,163,184,0.08)' } }
+    }
+};
+
+new Chart(document.getElementById('genreChart'), {
+    type: 'bar',
+    data: {
+        labels: stats.genre_labels,
+        datasets: [{ label: 'Movies', data: stats.genre_values,
+            backgroundColor: stats.genre_labels.map((_, i) =>
+                `hsla(${260 + i * 8}, 70%, 60%, 0.75)`),
+            borderRadius: 6 }]
+    },
+    options: { ...defaultOpts, plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('ratingChart'), {
+    type: 'doughnut',
+    data: {
+        labels: stats.rating_labels,
+        datasets: [{ data: stats.rating_values,
+            backgroundColor: [red, '#f97316', gold, green, blue, purple],
+            borderWidth: 0, hoverOffset: 8 }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', padding: 12 } } } }
+});
+
+new Chart(document.getElementById('yearChart'), {
+    type: 'line',
+    data: {
+        labels: stats.year_labels,
+        datasets: [{ label: 'Movies Released', data: stats.year_values,
+            borderColor: purple, backgroundColor: 'rgba(139,92,246,0.12)',
+            tension: 0.4, fill: true, pointRadius: 3, pointBackgroundColor: purple }]
+    },
+    options: defaultOpts
+});
+
+new Chart(document.getElementById('runtimeChart'), {
+    type: 'bar',
+    data: {
+        labels: stats.runtime_labels,
+        datasets: [{ label: 'Movies', data: stats.runtime_values,
+            backgroundColor: 'rgba(59,130,246,0.75)', borderRadius: 6 }]
+    },
+    options: { ...defaultOpts, plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('directorChart'), {
+    type: 'bar',
+    data: {
+        labels: stats.director_labels,
+        datasets: [{ label: 'Films Directed', data: stats.director_values,
+            backgroundColor: 'rgba(16,185,129,0.75)', borderRadius: 6 }]
+    },
+    options: { ...defaultOpts, indexAxis: 'y', plugins: { legend: { display: false } } }
+});
+</script>
+{% endblock %}

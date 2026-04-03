@@ -1,0 +1,54 @@
+# ── Virtual Environment ──────────────────────────────
+venv/
+env/
+.env
+.venv/
+
+# ── Model Files (large, generate locally) ───────────
+models/
+*.pkl
+
+# ── Dataset (large CSV files, download from Kaggle) ─
+data/
+
+# ── Python Cache ─────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.pycache
+
+# ── Environment & Secrets ────────────────────────────
+.env
+.env.local
+*.env
+
+# ── PyCharm IDE ───────────────────────────────────────
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# ── OS Files ─────────────────────────────────────────
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── Logs ─────────────────────────────────────────────
+*.log
+flask_session/
+logs/
+
+# ── Distribution & Build ──────────────────────────────
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# ── Testing ───────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
