@@ -21,7 +21,7 @@ pinned: false
 
 **A production-grade movie recommendation system built with TF-IDF vectorization, cosine similarity, and a custom hybrid scoring algorithm — deployed as a cinematic Netflix-style Flask web application.**
 
-[🌐 Live Demo](https://rafi-ul-cinematch-ai.hf.space) · [📊 Analytics Dashboard](https://rafi-ul-cinematch-ai.hf.space/eda) · [🐛 Report Bug](https://github.com/rafiul254/Syntecxhub_Project_Movie_Recommendation_system/issues)
+[🌐 Live Demo](https://Rafi-ul-cinematch-ai.hf.space) · [📊 Analytics Dashboard](https://Rafi-ul-cinematch-ai.hf.space/eda) · [🐛 Report Bug](https://github.com/rafiul254/Syntecxhub_Project_Movie_Recommendation_system/issues)
 
 </div>
 
