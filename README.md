@@ -257,7 +257,7 @@ CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:7860", "--workers", "1", "--timeo
 ```
 Flask==2.3.3
 Werkzeug==2.3.7
-scikit-learn==1.3.2
+scikit-learn==1.6.0
 pandas==2.1.4
 numpy==1.24.4
 requests==2.31.0
@@ -268,10 +268,11 @@ gunicorn==21.2.0
 
 ## 👤 Author
 
-**Rafi ul Islam**
-IoT & Robotics Engineering Student
+**Rafiul Islam**
 
-University of Future Technology Bangladesh (UFTB)|
+Currently IoT & Robotics Engineering Student
+
+University of Future Technology Bangladesh (UFTB)| 
 Syntecxhub ML Internship|
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/rafiul-islam-25sep92004)
