@@ -9,7 +9,7 @@ models/
 *.pkl
 
 # ── Dataset (large CSV files, download from Kaggle) ─
-data/
+# data/
 
 # ── Python Cache ─────────────────────────────────────
 __pycache__/
