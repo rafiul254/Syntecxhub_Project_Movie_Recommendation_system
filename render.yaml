@@ -9,6 +9,6 @@ services:
     startCommand: gunicorn app:app --workers 1 --timeout 120
     envVars:
       - key: TMDB_API_KEY
-        value: your_tmdb_api_key_here
+        value: 6510a58a97f15e281d23de77c93e42ba
       - key: SECRET_KEY
-        value: cinematch_syntecxhub_2024
+        value: cinematch_syntecxhub_2026
