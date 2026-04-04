@@ -4,11 +4,11 @@ services:
     env: python
     region: singapore
     plan: free
-    buildCommand: pip install -r requirements.txt && python train_model.py
+    pythonVersion: "3.11.9"
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt && python train_model.py
     startCommand: gunicorn app:app --workers 1 --timeout 120
     envVars:
       - key: TMDB_API_KEY
-        value: 6510a58a97f15e281d23de77c93e42ba
+        value: your_tmdb_api_key_here
       - key: SECRET_KEY
-        value: cinematchAi_syntecxhub_2026_secure
-
+        value: cinematch_syntecxhub_2024
