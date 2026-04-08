@@ -270,10 +270,10 @@ gunicorn==21.2.0
 
 **Rafiul Islam**
 
-Currently IoT & Robotics Engineering Student
+Currently IoT & Robotics Engineering Student,
 
-University of Future Technology Bangladesh (UFTB)| 
-Syntecxhub ML Internship|
+University of Frontier Technology Bangladesh (UFTB) . 
+Syntecxhub ML Internship .
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/rafiul-islam-25sep92004)
 [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=flat-square&logo=github)](https://github.com/rafiul254)
