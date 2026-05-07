@@ -1,12 +1,3 @@
----
-title: CineMatch AI
-emoji: 🎬
-colorFrom: purple
-colorTo: blue
-sdk: docker
-pinned: false
----
-
 # 🎬 CineMatch AI — Intelligent Movie Recommendation Engine
 
 <div align="center">
